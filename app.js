@@ -815,9 +815,27 @@ function openAdd() {
   renderAdd();
   $('#add-sheet').hidden = false;
   hideToast();
-  setTimeout(() => $('#item-name').focus(), 80);
+  // Enfocar en el mismo toque (así Android abre el teclado de inmediato) sin mover la página;
+  // luego, ya terminada la animación, acomodar la hoja sobre el teclado.
+  $('#item-name').focus({ preventScroll: true });
+  setTimeout(fitKeyboard, 150);
+  setTimeout(fitKeyboard, 350);
 }
 function closeAdd() { $('#add-sheet').hidden = true; }
+
+/* Teclado del celular: mide cuánto tapa la pantalla y sube las hojas ese espacio.
+   (Funciona junto con interactive-widget=resizes-content en el <meta viewport>.) */
+function fitKeyboard() {
+  const vv = window.visualViewport;
+  if (!vv) return;
+  const kb = Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop));
+  document.documentElement.style.setProperty('--kb', kb + 'px');
+}
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', fitKeyboard);
+  window.visualViewport.addEventListener('scroll', fitKeyboard);
+}
+window.addEventListener('resize', fitKeyboard);
 
 function renderAdd() {
   const name = $('#item-name').value.trim();

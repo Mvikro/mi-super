@@ -490,3 +490,7 @@ body { font-family: Rubik, Roboto, "Segoe UI", system-ui, sans-serif; font-size:
 .empty b { color: var(--pink); }
 
 button:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+
+/* Hojas sobre el teclado: el fondo de la hoja termina donde empieza el teclado */
+.sheet-backdrop { bottom: var(--kb, 0px); transition: bottom .18s ease-out; }
+.sheet { max-height: calc(100% - 16px); }
