@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0b0b0c">
+  <meta name="theme-color" content="#0F0F11">
   <meta name="color-scheme" content="dark">
   <meta name="description" content="Mi lista de compras para todo: súper, mercado, tlapalería, hogar y más. Sin conexión y sin permisos.">
   <title>Mandado</title>
@@ -13,78 +13,111 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="hero">
-    <img src="img/hero.svg" alt="" class="hero-img" width="720" height="300">
-    <div class="hero-text">
-      <h1>Mandado</h1>
-      <p id="counter">Nada pendiente</p>
-      <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+  <header class="top">
+    <img class="top-img" src="img/hero.svg" alt="" width="720" height="300">
+    <div class="top-text">
+      <p class="greet" id="greet">Hola</p>
+      <h1 id="title">Mandado</h1>
+      <p class="summary" id="summary">Nada pendiente</p>
     </div>
+    <svg class="ring" viewBox="0 0 48 48" aria-hidden="true">
+      <circle cx="24" cy="24" r="20" class="ring-track"/>
+      <circle cx="24" cy="24" r="20" class="ring-fill" id="ring-fill"/>
+      <text x="24" y="28" text-anchor="middle" id="ring-text">0</text>
+    </svg>
   </header>
 
-  <nav class="tabs" role="tablist">
-    <button role="tab" id="tab-list" aria-selected="true">Mi lista</button>
-    <button role="tab" id="tab-shop" aria-selected="false">🛍️ De compras</button>
-  </nav>
-
   <main>
-    <!-- MI LISTA: agregar y organizar -->
-    <section id="view-list">
-      <form id="add-form" autocomplete="off">
-        <div class="add-row">
-          <input id="item-name" type="text" placeholder="¿Qué necesitas?" maxlength="60" enterkeyhint="done" aria-label="Producto">
-          <input id="item-qty" type="text" placeholder="Cant." maxlength="12" aria-label="Cantidad">
-          <button type="submit" class="btn-add" aria-label="Agregar">+</button>
-        </div>
-        <div class="preview" id="preview" hidden></div>
-        <div class="chips-row" id="store-picker" aria-label="Dónde comprarlo"></div>
-      </form>
-
-      <div id="suggestions" class="suggestions" hidden>
-        <h3 class="section-label">Compras frecuentes</h3>
-        <div class="chips" id="suggestion-chips"></div>
-      </div>
-
+    <!-- MI LISTA -->
+    <section id="view-list" class="view">
+      <div class="seg" id="scope-seg" aria-label="Casa o trabajo"></div>
       <div id="list-groups"></div>
-      <p class="hint" id="list-hint" hidden>Toca un producto para editarlo o cambiarlo de lugar.</p>
-      <p class="empty" id="empty-list" hidden>Tu lista está vacía.<br>Escribe arriba lo que necesites: comida, un pegamento, una repisa…</p>
+      <p class="empty small" id="empty-scope" hidden></p>
+      <div class="empty" id="empty-list" hidden>
+        <p class="empty-title">Tu lista está vacía</p>
+        <p>Toca <b>+</b> para agregar lo que necesites: comida, un pegamento, una repisa…</p>
+      </div>
     </section>
 
-    <!-- DE COMPRAS: elige dónde estás y tacha -->
-    <section id="view-shop" hidden>
-      <div class="chips-row shop-filter" id="shop-filter" aria-label="¿Dónde estás?"></div>
+    <!-- DE COMPRAS -->
+    <section id="view-shop" class="view" hidden>
+      <div class="pills shop-filter" id="shop-filter" aria-label="¿Dónde estás? Puedes elegir varios"></div>
+      <p class="shop-hint" id="shop-hint"></p>
+      <div class="bar"><span id="shop-bar"></span></div>
       <div id="shop-groups"></div>
       <div id="also-here" hidden>
-        <h3 class="section-label also-title">También lo puedes conseguir aquí</h3>
+        <h3 class="label accent" id="also-title">También lo puedes conseguir aquí</h3>
         <div id="also-items"></div>
       </div>
-      <p class="empty" id="empty-shop" hidden></p>
+      <div class="empty small" id="empty-shop" hidden></div>
       <div id="cart-section" hidden>
-        <h3 class="section-label">Ya lo tengo <span id="cart-count"></span></h3>
+        <h3 class="label">Ya lo tengo <span id="cart-count"></span></h3>
         <div id="cart-items"></div>
-        <button id="finish-btn" class="btn-finish">Terminar compra</button>
+        <button id="finish-btn" class="btn-outline">Terminar compra</button>
       </div>
     </section>
   </main>
 
-  <!-- Hoja para editar / mover un producto -->
-  <div id="sheet-backdrop" class="sheet-backdrop" hidden>
-    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
-      <div class="sheet-handle"></div>
-      <h2 id="sheet-title">Editar</h2>
-      <div class="add-row">
+  <!-- Barra inferior -->
+  <nav class="bottom-nav">
+    <button id="nav-list" class="nav-btn" aria-label="Mi lista" aria-current="page"></button>
+    <button id="fab" class="fab" aria-label="Agregar"></button>
+    <button id="nav-shop" class="nav-btn" aria-label="De compras"></button>
+  </nav>
+
+  <!-- Hoja: agregar -->
+  <div id="add-sheet" class="sheet-backdrop" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="add-title">
+      <div class="handle"></div>
+      <div class="sheet-head">
+        <h2 id="add-title">Agregar</h2>
+        <button class="link" id="add-close">Listo</button>
+      </div>
+      <form id="add-form" autocomplete="off">
+        <div class="field-row">
+          <span class="field-icon" id="add-icon"></span>
+          <input id="item-name" type="text" placeholder="¿Qué necesitas?" maxlength="60" enterkeyhint="done" aria-label="Producto">
+        </div>
+        <button type="button" class="pill work-toggle" id="work-toggle" aria-pressed="false"></button>
+        <div id="add-where" hidden>
+          <h3 class="label">Lo encuentras en</h3>
+          <div class="pills wrap" id="add-stores"></div>
+        </div>
+        <h3 class="label">Cantidad</h3>
+        <div class="qty-row">
+          <button type="button" class="step" id="qty-minus" aria-label="Menos"></button>
+          <input id="item-qty" type="text" placeholder="—" maxlength="12" aria-label="Cantidad">
+          <button type="button" class="step" id="qty-plus" aria-label="Más"></button>
+        </div>
+        <button type="submit" class="btn-primary" id="add-submit">Agregar</button>
+      </form>
+      <div id="suggestions" hidden>
+        <h3 class="label">Compras frecuentes</h3>
+        <div class="pills wrap" id="suggestion-chips"></div>
+      </div>
+      <p class="added-note" id="added-note" hidden></p>
+    </div>
+  </div>
+
+  <!-- Hoja: editar -->
+  <div id="edit-sheet" class="sheet-backdrop" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="edit-title">
+      <div class="handle"></div>
+      <div class="sheet-head"><h2 id="edit-title">Editar</h2></div>
+      <div class="field-row">
+        <span class="field-icon" id="edit-icon"></span>
         <input id="edit-name" type="text" maxlength="60" aria-label="Producto">
-        <input id="edit-qty" type="text" maxlength="12" placeholder="Cant." aria-label="Cantidad">
+        <input id="edit-qty" type="text" maxlength="12" placeholder="Cant." aria-label="Cantidad" class="qty-mini">
       </div>
-      <div id="edit-suggested-box">
-        <h3 class="section-label">Sugeridos para este producto</h3>
-        <div class="chips wrap" id="edit-suggested"></div>
-      </div>
-      <h3 class="section-label">Otros lugares</h3>
-      <div class="chips wrap" id="edit-stores"></div>
+      <button type="button" class="pill work-toggle" id="edit-work" aria-pressed="false"></button>
+      <h3 class="label">Sugeridos para este producto</h3>
+      <div class="pills wrap" id="edit-suggested"></div>
+      <h3 class="label">Otros lugares</h3>
+      <div class="pills wrap" id="edit-stores"></div>
       <div id="edit-aisle-box">
-        <h3 class="section-label">Pasillo del súper</h3>
-        <div class="chips wrap" id="edit-aisles"></div>
+        <h3 class="label">Pasillo del súper</h3>
+        <div class="pills wrap" id="edit-aisles"></div>
       </div>
       <div class="sheet-actions">
         <button id="edit-delete" class="btn-ghost">Eliminar</button>
