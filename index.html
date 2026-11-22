@@ -36,6 +36,7 @@
           <input id="item-qty" type="text" placeholder="Cant." maxlength="12" aria-label="Cantidad">
           <button type="submit" class="btn-add" aria-label="Agregar">+</button>
         </div>
+        <div class="preview" id="preview" hidden></div>
         <div class="chips-row" id="store-picker" aria-label="Dónde comprarlo"></div>
       </form>
 
@@ -53,6 +54,10 @@
     <section id="view-shop" hidden>
       <div class="chips-row shop-filter" id="shop-filter" aria-label="¿Dónde estás?"></div>
       <div id="shop-groups"></div>
+      <div id="also-here" hidden>
+        <h3 class="section-label also-title">También lo puedes conseguir aquí</h3>
+        <div id="also-items"></div>
+      </div>
       <p class="empty" id="empty-shop" hidden></p>
       <div id="cart-section" hidden>
         <h3 class="section-label">Ya lo tengo <span id="cart-count"></span></h3>
@@ -71,7 +76,11 @@
         <input id="edit-name" type="text" maxlength="60" aria-label="Producto">
         <input id="edit-qty" type="text" maxlength="12" placeholder="Cant." aria-label="Cantidad">
       </div>
-      <h3 class="section-label">¿Dónde lo compras?</h3>
+      <div id="edit-suggested-box">
+        <h3 class="section-label">Sugeridos para este producto</h3>
+        <div class="chips wrap" id="edit-suggested"></div>
+      </div>
+      <h3 class="section-label">Otros lugares</h3>
       <div class="chips wrap" id="edit-stores"></div>
       <div id="edit-aisle-box">
         <h3 class="section-label">Pasillo del súper</h3>

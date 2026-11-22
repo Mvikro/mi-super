@@ -11,18 +11,18 @@ const OLD_KEY = 'misuper.v1'; // versión anterior "Mi Súper"
 
 // ---------- Lugares donde se compra ----------
 const STORES = [
-  { id: 'super',      emoji: '🛒', label: 'Súper' },
-  { id: 'verduleria', emoji: '🥬', label: 'Verdulería / mercado' },
-  { id: 'carniceria', emoji: '🥩', label: 'Carnicería / pollería' },
-  { id: 'tiendita',   emoji: '🏪', label: 'Tiendita de la esquina' },
-  { id: 'farmacia',   emoji: '💊', label: 'Farmacia' },
-  { id: 'tlapaleria', emoji: '🔩', label: 'Tlapalería / ferretería' },
-  { id: 'hogar',      emoji: '🛋️', label: 'Hogar y muebles' },
-  { id: 'papeleria',  emoji: '✏️', label: 'Papelería' },
-  { id: 'ropa',       emoji: '👕', label: 'Ropa y calzado' },
-  { id: 'mascotas',   emoji: '🐾', label: 'Mascotas' },
-  { id: 'enlinea',    emoji: '📦', label: 'En línea' },
-  { id: 'otros',      emoji: '📌', label: 'Otros' },
+  { id: 'super',      emoji: '🛒', label: 'Súper',                   short: 'Súper' },
+  { id: 'verduleria', emoji: '🥬', label: 'Verdulería / mercado',    short: 'Mercado' },
+  { id: 'carniceria', emoji: '🥩', label: 'Carnicería / pollería',   short: 'Carnicería' },
+  { id: 'tiendita',   emoji: '🏪', label: 'Tiendita de la esquina',  short: 'Tiendita' },
+  { id: 'farmacia',   emoji: '💊', label: 'Farmacia',                short: 'Farmacia' },
+  { id: 'tlapaleria', emoji: '🔩', label: 'Tlapalería / ferretería', short: 'Ferretería' },
+  { id: 'hogar',      emoji: '🛋️', label: 'Hogar y muebles',         short: 'Hogar' },
+  { id: 'papeleria',  emoji: '✏️', label: 'Papelería',               short: 'Papelería' },
+  { id: 'ropa',       emoji: '👕', label: 'Ropa y calzado',          short: 'Ropa' },
+  { id: 'mascotas',   emoji: '🐾', label: 'Mascotas',                short: 'Mascotas' },
+  { id: 'enlinea',    emoji: '📦', label: 'En línea',                short: 'En línea' },
+  { id: 'otros',      emoji: '📌', label: 'Otros',                   short: 'Otros' },
 ];
 
 // ---------- Pasillos dentro del súper ----------
@@ -39,38 +39,78 @@ const AISLES = [
   { id: 'otros',      label: '📦 Otros' },
 ];
 
-/* ---------- Diccionario para clasificar ----------
-   [lugar, pasillo-si-va-al-súper, palabras]
-   Palabras de dos en dos se escriben con guion: "papel-higienico".
+/* ---------- Dónde se consigue cada cosa ----------
+   [lugares del más fácil al menos fácil, pasillo-si-va-al-súper, palabras]
+   Palabras de dos en dos con guion: "papel-higienico".
    Se ignoran "de", "para", "la", etc.: "pasta de dientes" = "pasta-dientes". */
 const RULES = [
-  ['verduleria', 'frutas', 'manzana platano banana jitomate tomate tomatillo cebolla aguacate limon papa zanahoria lechuga chile ajo naranja fresa pepino calabaza calabacita cilantro perejil uva mango pina melon sandia papaya brocoli coliflor espinaca elote nopal fruta verdura champinon hongo pera kiwi guayaba mandarina toronja jicama betabel apio rabano ejote chayote epazote hierbabuena jengibre durazno ciruela tuna chicharo camote frambuesa zarzamora arandano coco pimiento acelga'],
-  ['carniceria', 'carnes', 'pollo carne res cerdo puerco chorizo molida bistec pechuga milanesa costilla arrachera chuleta pierna muslo alitas carnitas longaniza higado cecina suadero filete'],
-  ['super', 'carnes', 'jamon salchicha tocino salami pepperoni pescado camaron salmon tilapia surimi marisco atun-fresco'],
-  ['super', 'lacteos', 'leche queso yogur yogurt crema mantequilla huevo panela requeson jocoque margarina'],
-  ['super', 'pan', 'pan bolillo telera baguette tostada concha pan-dulce pan-integral pan-caja bimbo'],
-  ['super', 'despensa', 'arroz frijol pasta sopa aceite azucar sal cafe cereal atun harina galleta salsa mayonesa catsup mostaza lenteja avena miel chocolate especia pimienta consome granola mermelada crema-cacahuate vinagre gelatina pure leche-condensada sardina chipotle aderezo tortilla-harina'],
-  ['super', 'bebidas', 'agua jugo vino cerveza te leche-almendra electrolit suero bebida tequila mezcal licor'],
+  // Comida fresca
+  ['verduleria,super', 'frutas', 'manzana platano banana jitomate tomate tomatillo cebolla aguacate limon papa zanahoria lechuga chile ajo naranja fresa pepino calabaza calabacita cilantro perejil uva mango pina melon sandia papaya brocoli coliflor espinaca elote nopal fruta verdura champinon hongo pera kiwi guayaba mandarina toronja jicama betabel apio rabano ejote chayote epazote hierbabuena jengibre durazno ciruela tuna chicharo camote frambuesa zarzamora arandano coco pimiento acelga'],
+  ['carniceria,super', 'carnes', 'pollo carne res cerdo puerco chorizo molida bistec pechuga milanesa costilla arrachera chuleta pierna muslo alitas carnitas longaniza higado cecina suadero filete'],
+  ['super,tiendita', 'carnes', 'jamon salchicha tocino salami pepperoni'],
+  ['super,verduleria', 'carnes', 'pescado camaron salmon tilapia surimi marisco'],
+  ['super,tiendita', 'lacteos', 'leche queso yogur yogurt crema mantequilla huevo panela requeson jocoque margarina'],
+  ['super,tiendita', 'pan', 'pan bolillo telera baguette tostada concha pan-dulce pan-integral pan-caja bimbo'],
+  // Despensa
+  ['super,tiendita,enlinea', 'despensa', 'arroz frijol pasta sopa aceite azucar sal cafe cereal atun galleta salsa mayonesa catsup mostaza lenteja avena chocolate consome sardina chipotle aderezo pure leche-condensada gelatina harina mermelada vinagre'],
+  ['super,enlinea', 'despensa', 'granola especia pimienta miel quinoa chia crema-cacahuate aceite-oliva proteina'],
+  ['super,tiendita', 'bebidas', 'agua jugo cerveza te leche-almendra electrolit suero bebida'],
+  ['super,enlinea,tiendita', 'bebidas', 'vino tequila mezcal licor whisky ron'],
   ['super', 'congelados', 'helado congelado congelada nugget papas-congeladas pizza verduras-congeladas'],
-  ['super', 'limpieza', 'jabon detergente cloro servilleta suavizante esponja fabuloso pinol lavatrastes aluminio papel papel-higienico bolsas-basura basura fibra desinfectante aromatizante insecticida raid servitoalla toallita escoba trapeador recogedor cubeta jerga'],
-  ['super', 'personal', 'shampoo champu acondicionador desodorante cepillo pasta-dental crema-dental pasta-dientes cepillo-dientes rastrillo toallas-femeninas toallas-sanitarias algodon hilo-dental enjuague jabon-tocador crema-corporal gel panal'],
-  ['farmacia', 'personal', 'medicina medicamento pastilla paracetamol ibuprofeno aspirina vitamina curita gasa alcohol agua-oxigenada termometro jarabe antibiotico antiacido omeprazol loratadina suero-oral protector-solar bloqueador gota pomada venda condon preservativo receta cubrebocas naproxeno diclofenaco melatonina'],
-  ['tiendita', 'despensa', 'refresco coca tortilla botana papitas sabritas dulce chicle hielo cigarro garrafon'],
-  ['tlapaleria', 'otros', 'pegamento resistol kola-loca silicon clavo tornillo taquete pija foco pintura brocha rodillo cinta cinta-aislar cinta-canela pila bateria herramienta martillo desarmador pinza llave cable extension contacto apagador manguera candado lija thinner sellador impermeabilizante cemento yeso tubo pvc cerradura bisagra cadena alambre lubricante flexometro nivel taladro broca escalera interruptor socket tuerca rondana regadera llave-agua mezcladora teflon'],
-  ['hogar', 'otros', 'mueble repisa cortina tapete lampara almohada sabana cobija edredon toalla organizador cojin silla mesa escritorio espejo cuadro maceta colchon closet ropero librero sarten olla vaso plato cubierto taza cuchillo tupper recipiente licuadora cafetera tostador microondas plancha ventilador perchero gancho canasta cesto bote-basura tabla-picar sofa sillon buro comoda zapatera reloj decoracion florero vela tendedero burro-planchar charola jarra termo'],
-  ['papeleria', 'otros', 'cuaderno libreta pluma lapiz lapices hoja folder sobre cartulina marcador plumon post-it nota engrapadora grapa clip sacapuntas goma borrador regla carpeta etiqueta impresion copia tinta toner papel-bond'],
-  ['ropa', 'otros', 'camisa camiseta playera pantalon calcetin zapato tenis chamarra sudadera ropa calzon boxer brasier pijama vestido falda cinturon gorra sombrero sandalia chancla sueter jeans short uniforme bufanda guante'],
-  ['mascotas', 'otros', 'croqueta arena alimento-perro alimento-gato collar correa juguete-perro premio-perro desparasitante'],
-  ['enlinea', 'otros', 'cargador audifono funda mouse teclado memoria usb cable-usb cable-hdmi hdmi bocina celular tablet laptop monitor control router adaptador smartwatch libro kindle impresora disco-duro webcam'],
+  ['tiendita,super', 'despensa', 'refresco coca tortilla botana papitas sabritas dulce chicle hielo cigarro garrafon'],
+  // Limpieza y cuidado personal
+  ['super,tiendita,enlinea', 'limpieza', 'jabon detergente cloro servilleta suavizante esponja fabuloso pinol lavatrastes aluminio papel papel-higienico bolsas-basura basura fibra desinfectante aromatizante servitoalla toallita'],
+  ['super,tlapaleria,verduleria', 'limpieza', 'escoba trapeador recogedor cubeta jerga'],
+  ['super,tlapaleria', 'limpieza', 'insecticida raid veneno-ratas'],
+  ['super,farmacia,tiendita', 'personal', 'shampoo champu acondicionador desodorante cepillo pasta-dental crema-dental pasta-dientes cepillo-dientes rastrillo toallas-femeninas toallas-sanitarias algodon hilo-dental enjuague jabon-tocador crema-corporal gel panal'],
+  // Farmacia
+  ['farmacia,super', 'personal', 'medicina medicamento pastilla paracetamol ibuprofeno aspirina curita gasa alcohol agua-oxigenada termometro jarabe antibiotico antiacido omeprazol loratadina suero-oral gota pomada venda receta cubrebocas naproxeno diclofenaco'],
+  ['farmacia,super,enlinea', 'personal', 'vitamina protector-solar bloqueador melatonina colageno'],
+  ['farmacia,super,tiendita', 'personal', 'condon preservativo'],
+  // Ferretería
+  ['tlapaleria,papeleria,super', 'otros', 'pegamento resistol kola-loca'],
+  ['tiendita,super,tlapaleria,enlinea', 'otros', 'pila bateria'],
+  ['tlapaleria,super,enlinea', 'otros', 'foco cinta cinta-aislar cinta-canela extension contacto apagador silicon clavo tornillo taquete pija lija lubricante candado manguera'],
+  ['tlapaleria,enlinea', 'otros', 'herramienta martillo desarmador pinza llave flexometro nivel taladro broca escalera brocha rodillo pintura cerradura bisagra cadena alambre cable regadera llave-agua mezcladora interruptor'],
+  ['tlapaleria', 'otros', 'cemento yeso impermeabilizante thinner sellador tubo pvc tuerca rondana teflon socket'],
+  // Hogar
+  ['hogar,enlinea', 'otros', 'mueble sofa sillon colchon closet ropero librero escritorio silla mesa buro comoda cuadro espejo florero lampara reloj decoracion'],
+  ['enlinea,hogar,tlapaleria', 'otros', 'repisa organizador perchero gancho zapatera estante soporte'],
+  ['hogar,enlinea,super', 'otros', 'cortina tapete cojin almohada sabana cobija edredon toalla vela'],
+  ['hogar,super,verduleria,enlinea', 'otros', 'sarten olla vaso plato cubierto taza cuchillo tupper recipiente tabla-picar charola jarra termo canasta cesto bote-basura tendedero'],
+  ['enlinea,hogar,super', 'otros', 'licuadora cafetera tostador microondas plancha ventilador burro-planchar freidora'],
+  ['hogar,verduleria,enlinea', 'otros', 'maceta planta tierra-plantas'],
+  ['tlapaleria,enlinea,super', 'otros', 'filtro purificador'],
+  // Otros
+  ['papeleria,super,enlinea', 'otros', 'cuaderno libreta pluma lapiz lapices hoja folder sobre cartulina marcador plumon post-it engrapadora grapa clip sacapuntas goma borrador regla carpeta etiqueta papel-bond'],
+  ['papeleria', 'otros', 'impresion copia'],
+  ['papeleria,enlinea', 'otros', 'tinta toner'],
+  ['ropa,enlinea,super', 'otros', 'camisa camiseta playera pantalon calcetin zapato tenis chamarra sudadera ropa calzon boxer brasier pijama vestido falda cinturon gorra sombrero sandalia chancla sueter jeans short uniforme bufanda guante'],
+  ['mascotas,super,enlinea', 'otros', 'croqueta arena alimento-perro alimento-gato collar correa juguete-perro premio-perro desparasitante'],
+  ['enlinea,super', 'otros', 'cargador audifono funda mouse teclado memoria usb cable-usb cable-hdmi hdmi bocina celular tablet laptop monitor control router adaptador smartwatch libro kindle impresora disco-duro webcam'],
 ];
 
-const STOPWORDS = new Set(['de', 'del', 'para', 'la', 'el', 'los', 'las', 'en', 'con', 'y', 'un', 'una', 'unos', 'unas', 'a', 'al']);
+/* ---------- Palabras que cambian dónde conviene comprar ----------
+   Suman puntos a ciertos lugares. Ej.: "repisa DE MADERA para el BAÑO". */
+const MODIFIERS = [
+  ['madera metal metalica metalico vidrio cristal pared flotante empotrable medida grande plegable ajustable acero', { enlinea: 2, hogar: 1, tlapaleria: 1 }],
+  ['bano cocina recamara sala comedor jardin patio cochera lavanderia', { hogar: 1, enlinea: 1 }],
+  ['modelo repuesto refaccion compatible original marca', { enlinea: 3 }],
+  ['kit juego set paquete mayoreo', { enlinea: 1, super: 1 }],
+  ['electrico electrica led inteligente bluetooth wifi recargable inalambrico usb', { enlinea: 2, tlapaleria: 1 }],
+  ['organico organica fresco fresca natural', { verduleria: 1 }],
+  ['regalo', { enlinea: 2 }],
+];
 
-// Índice: palabra -> { store, aisle }
-const INDEX = new Map();
-for (const [store, aisle, words] of RULES) {
-  for (const w of words.split(' ')) if (!INDEX.has(w)) INDEX.set(w, { store, aisle });
+const STOPWORDS = new Set(['de', 'del', 'para', 'la', 'el', 'los', 'las', 'en', 'con', 'y', 'un', 'una', 'unos', 'unas', 'a', 'al', 'mi', 'poner', 'que', 'por']);
+
+// Índices
+const INDEX = new Map(); // palabra -> { stores:[...], aisle }
+for (const [stores, aisle, words] of RULES) {
+  for (const w of words.split(' ')) if (!INDEX.has(w)) INDEX.set(w, { stores: stores.split(','), aisle });
 }
+const MOD_INDEX = new Map(); // palabra -> { lugar: puntos }
+for (const [words, boost] of MODIFIERS) for (const w of words.split(' ')) MOD_INDEX.set(w, boost);
 
 // ---------- Estado ----------
 let state; // se carga al final, cuando todo está definido
@@ -87,17 +127,16 @@ function load() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) return Object.assign(emptyState(), JSON.parse(raw));
-    // Pasa la lista de la versión "Mi Súper" a la nueva
     const old = localStorage.getItem(OLD_KEY);
     if (old) {
       const data = JSON.parse(old);
       const s = emptyState();
       s.items = (data.items || []).map((i) => {
-        const g = guess(i.name, {});
+        const g = analyze(i.name);
         return { id: i.id, name: i.name, qty: i.qty || '', store: g.store, aisle: g.aisle, done: !!i.done, t: i.t || Date.now() };
       });
       for (const [k, h] of Object.entries(data.history || {})) {
-        const g = guess(h.name, {});
+        const g = analyze(h.name);
         s.history[k] = { name: h.name, store: g.store, aisle: g.aisle, count: h.count || 1 };
       }
       return s;
@@ -116,39 +155,52 @@ const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').tri
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 const store = (id) => STORES.find((s) => s.id === id) || STORES.at(-1);
 const storeName = (id) => `${store(id).emoji} ${store(id).label}`;
+const storeShort = (id) => `${store(id).emoji} ${store(id).short}`;
 const aisleName = (id) => (AISLES.find((a) => a.id === id) || AISLES.at(-1)).label;
 const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
-const vibrate = (ms) => { if (navigator.vibrate) navigator.vibrate(ms); };
+const vibrate = (ms) => { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {} };
 
-function lookup(word) {
+function wordsOf(name) {
+  return norm(name).split(/[^a-z0-9ñ-]+/).filter((w) => w && !STOPWORDS.has(w));
+}
+
+function lookupIn(map, word) {
   for (const f of [word, word.replace(/s$/, ''), word.replace(/es$/, '')]) {
-    if (INDEX.has(f)) return INDEX.get(f);
+    if (map.has(f)) return map.get(f);
   }
   return null;
 }
 
-// Adivina dónde se compra algo. Si ya lo compraste antes, respeta dónde lo pusiste.
-function guess(name, history = state.history) {
-  const n = norm(name);
-  if (history[n]) return { store: history[n].store, aisle: history[n].aisle || 'otros' };
-  const words = n.split(/[^a-z0-9ñ-]+/).filter((w) => w && !STOPWORDS.has(w));
-  for (let i = 0; i < words.length - 1; i++) {        // primero frases de 2 palabras
-    const hit = lookup(words[i] + '-' + words[i + 1]) || INDEX.get(words[i] + '-' + words[i + 1]);
-    if (hit) return { ...hit };
+/* Analiza el nombre y devuelve TODOS los lugares donde se puede comprar,
+   ordenados del más conveniente al menos conveniente. */
+function analyze(name) {
+  const words = wordsOf(name);
+  let base = null;
+  for (let i = 0; i < words.length - 1 && !base; i++) base = lookupIn(INDEX, words[i] + '-' + words[i + 1]);
+  for (let i = 0; i < words.length && !base; i++) base = lookupIn(INDEX, words[i]);
+
+  const score = {};
+  if (base) base.stores.forEach((s, i) => { score[s] = 6 - i; });
+  for (const w of words) {
+    const boost = lookupIn(MOD_INDEX, w);
+    if (boost) for (const [s, p] of Object.entries(boost)) score[s] = (score[s] || 0) + p;
   }
-  for (const w of words) {                              // luego palabras sueltas
-    const hit = lookup(w);
-    if (hit) return { ...hit };
-  }
-  return { store: 'otros', aisle: 'otros' };
+  let ranking = Object.keys(score).sort((a, b) => score[b] - score[a]);
+  if (!ranking.length) ranking = ['otros'];
+  return { ranking, store: ranking[0], aisle: base ? base.aisle : 'otros' };
 }
 
-// Pasillo sugerido si algo se mueve al súper
-function aisleFor(name) {
-  const n = norm(name);
-  const words = n.split(/[^a-z0-9ñ-]+/).filter((w) => w && !STOPWORDS.has(w));
-  for (const w of words) { const hit = lookup(w); if (hit) return hit.aisle; }
-  return 'otros';
+// Lugar principal: el que tú elegiste antes, o el mejor sugerido
+function placeFor(name) {
+  const a = analyze(name);
+  const h = state.history[norm(name)];
+  if (h && h.store) return { ...a, store: h.store, aisle: h.aisle || a.aisle };
+  return a;
+}
+
+// Otros lugares donde también lo encuentras (máx. 3)
+function altsFor(item) {
+  return analyze(item.name).ranking.filter((s) => s !== item.store && s !== 'otros').slice(0, 3);
 }
 
 function remember(name, storeId, aisle) {
@@ -164,11 +216,8 @@ function addItem(rawName, qty, chosenStore) {
   const name = capitalize(rawName.trim().replace(/\s+/g, ' '));
   if (!name) return null;
   const key = norm(name);
-  let { store: st, aisle } = guess(name);
-  if (chosenStore !== 'auto') {
-    st = chosenStore;
-    if (st === 'super' && aisle === 'otros') aisle = aisleFor(name);
-  }
+  let { store: st, aisle } = placeFor(name);
+  if (chosenStore !== 'auto') st = chosenStore;
 
   let item = state.items.find((i) => norm(i.name) === key && !i.done);
   if (item) {
@@ -183,11 +232,28 @@ function addItem(rawName, qty, chosenStore) {
   return item;
 }
 
+function moveItem(id, storeId, rememberIt = true) {
+  const it = state.items.find((i) => i.id === id);
+  if (!it) return;
+  it.store = storeId;
+  if (rememberIt) remember(it.name, it.store, it.aisle);
+  save(); render();
+}
+
 function toggleItem(id) {
   const item = state.items.find((i) => i.id === id);
   if (!item) return;
   item.done = !item.done;
   vibrate(item.done ? 15 : 8);
+  save(); render();
+}
+
+// Comprado en otro lugar del planeado: se pasa a este lugar y se tacha
+function buyHere(id, storeId) {
+  const it = state.items.find((i) => i.id === id);
+  if (!it) return;
+  it.store = storeId; it.done = true;
+  vibrate(15);
   save(); render();
 }
 
@@ -242,16 +308,17 @@ function openEditor(id) {
 }
 
 function renderEditor() {
-  const stores = $('#edit-stores');
-  stores.innerHTML = '';
-  for (const s of STORES) {
-    const b = chipButton(`${s.emoji} ${s.label}`, editing.store === s.id, () => {
-      editing.store = s.id;
-      if (s.id === 'super' && editing.aisle === 'otros') editing.aisle = aisleFor($('#edit-name').value);
-      renderEditor();
-    });
-    stores.appendChild(b);
-  }
+  const suggested = analyze($('#edit-name').value || '').ranking.filter((s) => s !== 'otros');
+  const rest = STORES.map((s) => s.id).filter((id) => !suggested.includes(id));
+  const fill = (box, ids) => {
+    box.innerHTML = '';
+    for (const id of ids) {
+      box.appendChild(chipButton(storeName(id), editing.store === id, () => { editing.store = id; renderEditor(); }));
+    }
+  };
+  $('#edit-suggested-box').hidden = suggested.length === 0;
+  fill($('#edit-suggested'), suggested);
+  fill($('#edit-stores'), rest);
   $('#edit-aisle-box').hidden = editing.store !== 'super';
   const aisles = $('#edit-aisles');
   aisles.innerHTML = '';
@@ -265,12 +332,11 @@ function closeEditor() { $('#sheet-backdrop').hidden = true; editing = null; }
 function saveEditor() {
   const it = state.items.find((i) => i.id === editing.id);
   if (it) {
-    const name = capitalize($('#edit-name').value.trim().replace(/\s+/g, ' ')) || it.name;
-    it.name = name;
+    it.name = capitalize($('#edit-name').value.trim().replace(/\s+/g, ' ')) || it.name;
     it.qty = $('#edit-qty').value.trim();
     it.store = editing.store;
     it.aisle = editing.aisle;
-    remember(name, it.store, it.aisle); // la próxima vez irá al mismo lugar
+    remember(it.name, it.store, it.aisle); // la próxima vez irá al mismo lugar
   }
   closeEditor(); save(); render();
 }
@@ -318,11 +384,9 @@ function chipButton(label, pressed, onClick) {
   return b;
 }
 
-// Agrupa por lugar, en el orden de STORES
 function byStore(items) {
   return STORES.map((s) => [s.id, items.filter((i) => i.store === s.id)]).filter(([, l]) => l.length);
 }
-// Agrupa por pasillo del súper
 function byAisle(items) {
   return AISLES.map((a) => [a.id, items.filter((i) => (i.aisle || 'otros') === a.id)]).filter(([, l]) => l.length);
 }
@@ -334,6 +398,19 @@ function renderStorePicker() {
   for (const s of STORES) {
     box.appendChild(chipButton(`${s.emoji} ${s.label}`, addStore === s.id, () => { addStore = s.id; renderStorePicker(); $('#item-name').focus(); }));
   }
+}
+
+// Mientras escribes, te dice dónde lo puedes conseguir
+function renderPreview() {
+  const box = $('#preview');
+  const name = $('#item-name').value.trim();
+  if (name.length < 3 || addStore !== 'auto') { box.hidden = true; return; }
+  const p = placeFor(name);
+  const top = [p.store, ...p.ranking.filter((s) => s !== p.store && s !== 'otros')].slice(0, 4);
+  box.innerHTML = '';
+  box.appendChild(el('span', 'preview-label', 'Lo encuentras en:'));
+  top.forEach((s, i) => box.appendChild(el('span', 'preview-chip' + (i === 0 ? ' is-main' : ''), storeShort(s))));
+  box.hidden = false;
 }
 
 function renderSuggestions() {
@@ -351,19 +428,40 @@ function renderSuggestions() {
   for (const [, h] of list) {
     const b = el('button', 'chip', h.name);
     b.type = 'button';
-    b.addEventListener('click', () => { addItem(h.name, '', h.store); $('#item-name').value = ''; renderSuggestions(); });
+    b.addEventListener('click', () => { addItem(h.name, '', h.store); $('#item-name').value = ''; renderPreview(); renderSuggestions(); });
     box.appendChild(b);
   }
 }
 
 function listRow(it) {
   const row = el('div', 'item' + (it.done ? ' is-done' : ''));
+  const body = el('div', 'item-body');
   const main = el('button', 'item-main');
   main.type = 'button';
   main.appendChild(el('span', 'name', it.name));
   if (it.qty) main.appendChild(el('span', 'qty', it.qty));
   main.addEventListener('click', () => openEditor(it.id));
-  row.appendChild(main);
+  body.appendChild(main);
+
+  const alts = altsFor(it);
+  if (alts.length && !it.done) {
+    const line = el('div', 'alts');
+    line.appendChild(el('span', 'alts-label', 'También en:'));
+    for (const s of alts) {
+      const b = el('button', 'alt-chip', storeShort(s));
+      b.type = 'button';
+      b.setAttribute('aria-label', `Mover ${it.name} a ${store(s).label}`);
+      b.addEventListener('click', () => {
+        const from = it.store;
+        moveItem(it.id, s);
+        showToast(`${it.name} → ${storeName(s)}`, 'Deshacer', () => moveItem(it.id, from));
+      });
+      line.appendChild(b);
+    }
+    body.appendChild(line);
+  }
+  row.appendChild(body);
+
   const del = el('button', 'del', '✕');
   del.setAttribute('aria-label', 'Eliminar ' + it.name);
   del.addEventListener('click', () => removeItem(it.id));
@@ -398,31 +496,40 @@ function renderList() {
   }
 }
 
-function shopButton(it, showStore) {
+function shopButton(it, opts = {}) {
   const b = el('button', 'shop-item' + (it.done ? ' is-done' : ''));
   b.appendChild(el('span', 'box'));
-  const txt = el('span', 'name', it.name);
+  const txt = el('span', 'name-col');
+  txt.appendChild(el('span', 'name', it.name));
+  if (opts.from) txt.appendChild(el('span', 'from', `Lo tenías para ${storeShort(it.store)}`));
   b.appendChild(txt);
-  if (showStore && it.done) b.appendChild(el('span', 'where', store(it.store).emoji));
+  if (opts.showStore && it.done) b.appendChild(el('span', 'where', store(it.store).emoji));
   if (it.qty) b.appendChild(el('span', 'qty', it.qty));
-  b.addEventListener('click', () => toggleItem(it.id));
+  b.addEventListener('click', () => (opts.buyAt ? buyHere(it.id, opts.buyAt) : toggleItem(it.id)));
   return b;
 }
 
 function renderShopFilter() {
   const box = $('#shop-filter');
   box.innerHTML = '';
-  const counts = {};
-  for (const i of state.items) counts[i.store] = (counts[i.store] || 0) + (i.done ? 0 : 1);
-  const present = STORES.filter((s) => state.items.some((i) => i.store === s.id));
+  const pending = state.items.filter((i) => !i.done);
+  const main = {}; const extra = {};
+  for (const i of pending) {
+    main[i.store] = (main[i.store] || 0) + 1;
+    for (const s of altsFor(i)) extra[s] = (extra[s] || 0) + 1;
+  }
+  const present = STORES.filter((s) => main[s.id] || extra[s.id] || state.items.some((i) => i.done && i.store === s.id));
   if (state.shopStore !== 'all' && !present.some((s) => s.id === state.shopStore)) state.shopStore = 'all';
-  const pending = state.items.filter((i) => !i.done).length;
-  box.appendChild(chipButton(`Todo · ${pending}`, state.shopStore === 'all', () => { state.shopStore = 'all'; save(); render(); }));
+  box.appendChild(chipButton(`Todo · ${pending.length}`, state.shopStore === 'all', () => { state.shopStore = 'all'; save(); render(); }));
   for (const s of present) {
-    box.appendChild(chipButton(`${s.emoji} ${s.label} · ${counts[s.id] || 0}`, state.shopStore === s.id, () => {
+    const label = `${s.emoji} ${s.short} · ${main[s.id] || 0}${extra[s.id] ? ` +${extra[s.id]}` : ''}`;
+    box.appendChild(chipButton(label, state.shopStore === s.id, () => {
       state.shopStore = s.id; save(); render(); window.scrollTo({ top: 0 });
     }));
   }
+  // Deja visible el lugar elegido dentro de la fila deslizable
+  const sel = box.querySelector('[aria-pressed="true"]');
+  if (sel) box.scrollLeft = Math.max(0, sel.offsetLeft - box.clientWidth / 2 + sel.offsetWidth / 2);
 }
 
 function renderShop() {
@@ -455,8 +562,16 @@ function renderShop() {
     pending.forEach((it) => root.appendChild(shopButton(it)));
   }
 
+  // "También lo puedes conseguir aquí": cosas planeadas para otro lugar
+  const alsoBox = $('#also-here');
+  const also = f === 'all' ? [] : state.items.filter((i) => !i.done && i.store !== f && altsFor(i).includes(f));
+  alsoBox.hidden = also.length === 0;
+  const alsoList = $('#also-items');
+  alsoList.innerHTML = '';
+  also.forEach((it) => alsoList.appendChild(shopButton(it, { from: true, buyAt: f })));
+
   const empty = $('#empty-shop');
-  empty.hidden = pending.length > 0;
+  empty.hidden = pending.length > 0 || also.length > 0;
   empty.textContent = !state.items.length ? 'Tu lista está vacía.'
     : f === 'all' ? '¡Ya tienes todo! 🎉' : `Nada pendiente en ${storeName(f)} 🎉`;
 
@@ -464,7 +579,7 @@ function renderShop() {
   $('#cart-count').textContent = `(${done.length})`;
   const cart = $('#cart-items');
   cart.innerHTML = '';
-  done.forEach((it) => cart.appendChild(shopButton(it, f === 'all')));
+  done.forEach((it) => cart.appendChild(shopButton(it, { showStore: f === 'all' })));
 }
 
 function renderHeader() {
@@ -494,11 +609,15 @@ $('#add-form').addEventListener('submit', (e) => {
   $('#item-qty').value = '';
   addStore = 'auto';
   renderStorePicker();
+  renderPreview();
   renderSuggestions();
   $('#item-name').focus();
-  if (item) showToast(`${item.name} → ${storeName(item.store)}`, 'Cambiar', () => openEditor(item.id));
+  if (item) {
+    const alts = altsFor(item).map((s) => store(s).emoji).join(' ');
+    showToast(`${item.name} → ${storeShort(item.store)}${alts ? ` · también ${alts}` : ''}`, 'Cambiar', () => openEditor(item.id));
+  }
 });
-$('#item-name').addEventListener('input', renderSuggestions);
+$('#item-name').addEventListener('input', () => { renderPreview(); renderSuggestions(); });
 $('#tab-list').addEventListener('click', () => setView('list'));
 $('#tab-shop').addEventListener('click', () => setView('shop'));
 $('#finish-btn').addEventListener('click', finishShopping);
@@ -510,11 +629,10 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && editing)
 
 // ---------- Inicio ----------
 state = load();
-save(); // guarda de inmediato si se migró desde "Mi Súper"
+save();
 renderStorePicker();
 setView(state.view);
 
-// Permite usarla sin internet una vez instalada
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
