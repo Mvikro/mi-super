@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0b0b0c">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="Mi lista de compras personal, sin conexión y sin permisos.">
-  <title>Mi Súper</title>
+  <meta name="description" content="Mi lista de compras para todo: súper, mercado, tlapalería, hogar y más. Sin conexión y sin permisos.">
+  <title>Mandado</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -16,53 +16,77 @@
   <header class="hero">
     <img src="img/hero.svg" alt="" class="hero-img" width="720" height="300">
     <div class="hero-text">
-      <h1>Mi Súper</h1>
-      <p id="counter">Lista vacía</p>
+      <h1>Mandado</h1>
+      <p id="counter">Nada pendiente</p>
       <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
     </div>
   </header>
 
   <nav class="tabs" role="tablist">
     <button role="tab" id="tab-list" aria-selected="true">Mi lista</button>
-    <button role="tab" id="tab-shop" aria-selected="false">🛒 En el súper</button>
+    <button role="tab" id="tab-shop" aria-selected="false">🛍️ De compras</button>
   </nav>
 
   <main>
-    <!-- MODO LISTA: agregar y organizar -->
+    <!-- MI LISTA: agregar y organizar -->
     <section id="view-list">
       <form id="add-form" autocomplete="off">
         <div class="add-row">
           <input id="item-name" type="text" placeholder="¿Qué necesitas?" maxlength="60" enterkeyhint="done" aria-label="Producto">
-          <input id="item-qty" type="text" placeholder="Cant." maxlength="12" aria-label="Cantidad" inputmode="text">
+          <input id="item-qty" type="text" placeholder="Cant." maxlength="12" aria-label="Cantidad">
           <button type="submit" class="btn-add" aria-label="Agregar">+</button>
         </div>
-        <div class="cats" id="cat-picker" aria-label="Pasillo"></div>
+        <div class="chips-row" id="store-picker" aria-label="Dónde comprarlo"></div>
       </form>
 
       <div id="suggestions" class="suggestions" hidden>
-        <h3>Compras frecuentes</h3>
+        <h3 class="section-label">Compras frecuentes</h3>
         <div class="chips" id="suggestion-chips"></div>
       </div>
 
       <div id="list-groups"></div>
-      <p class="empty" id="empty-list" hidden>Tu lista está vacía.<br>Escribe arriba lo que necesitas.</p>
+      <p class="hint" id="list-hint" hidden>Toca un producto para editarlo o cambiarlo de lugar.</p>
+      <p class="empty" id="empty-list" hidden>Tu lista está vacía.<br>Escribe arriba lo que necesites: comida, un pegamento, una repisa…</p>
     </section>
 
-    <!-- MODO SÚPER: letra grande, solo tocar para tachar -->
+    <!-- DE COMPRAS: elige dónde estás y tacha -->
     <section id="view-shop" hidden>
+      <div class="chips-row shop-filter" id="shop-filter" aria-label="¿Dónde estás?"></div>
       <div id="shop-groups"></div>
-      <p class="empty" id="empty-shop" hidden>No hay nada pendiente. 🎉</p>
+      <p class="empty" id="empty-shop" hidden></p>
       <div id="cart-section" hidden>
-        <h3 class="cart-title">En el carrito <span id="cart-count"></span></h3>
+        <h3 class="section-label">Ya lo tengo <span id="cart-count"></span></h3>
         <div id="cart-items"></div>
         <button id="finish-btn" class="btn-finish">Terminar compra</button>
       </div>
     </section>
   </main>
 
+  <!-- Hoja para editar / mover un producto -->
+  <div id="sheet-backdrop" class="sheet-backdrop" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+      <div class="sheet-handle"></div>
+      <h2 id="sheet-title">Editar</h2>
+      <div class="add-row">
+        <input id="edit-name" type="text" maxlength="60" aria-label="Producto">
+        <input id="edit-qty" type="text" maxlength="12" placeholder="Cant." aria-label="Cantidad">
+      </div>
+      <h3 class="section-label">¿Dónde lo compras?</h3>
+      <div class="chips wrap" id="edit-stores"></div>
+      <div id="edit-aisle-box">
+        <h3 class="section-label">Pasillo del súper</h3>
+        <div class="chips wrap" id="edit-aisles"></div>
+      </div>
+      <div class="sheet-actions">
+        <button id="edit-delete" class="btn-ghost">Eliminar</button>
+        <button id="edit-save" class="btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+
   <div id="toast" class="toast" hidden>
     <span id="toast-text"></span>
-    <button id="toast-undo">Deshacer</button>
+    <button id="toast-action"></button>
   </div>
 
   <script src="app.js"></script>

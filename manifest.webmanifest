@@ -1,7 +1,7 @@
 {
-  "name": "Mi Súper",
-  "short_name": "Mi Súper",
-  "description": "Mi lista de compras personal, sin conexión y sin permisos.",
+  "name": "Mandado",
+  "short_name": "Mandado",
+  "description": "Mi lista de compras para todo: súper, mercado, tlapalería, hogar y más.",
   "lang": "es",
   "start_url": "./",
   "scope": "./",
