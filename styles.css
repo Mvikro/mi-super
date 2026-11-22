@@ -368,3 +368,125 @@ main { padding: 6px 16px; }
 
 /* Enfoque con teclado visible */
 button:focus-visible { outline: 2px solid rgba(255,138,61,.7); outline-offset: 2px; }
+
+/* =========================================================
+   TEMA "NEÓN NOCHE" (sistema de diseño cyberpunk)
+   Azul = interacción y ubicación · Rosa = lo seleccionado y el botón +
+   ========================================================= */
+:root {
+  /* Fondos y texto */
+  --bg: #08090f; --surface: #0f111c; --surface-2: #161928; --line: #22263a;
+  --text: #d8dcec; --muted: #9097b5; --faint: #646a8a;
+  --surface-top: #161a29; --surface-bottom: #0c0e18;
+  --control-top: #20243a; --control-bottom: #151827;
+  --well-top: #040509; --well-bottom: #11131f;
+  --on-neon: #05060b;
+  /* Neón */
+  --blue: #0091b9; --blue-hi: #1fb0d6; --blue-lo: #0084aa; --blue-soft: #04202b; --blue-line: #0a7695;
+  --pink: #ff1080; --pink-hi: #ff4a9e; --pink-lo: #ea0074; --pink-soft: #2b0620; --pink-soft-hi: #3d0a2d;
+  --accent: var(--blue);
+  --accent-soft: rgba(0, 145, 185, .14);
+  --blue-grad: linear-gradient(180deg, var(--blue-hi) 0%, var(--blue) 55%, var(--blue-lo) 100%);
+  --pink-grad: linear-gradient(180deg, var(--pink-hi) 0%, var(--pink) 55%, var(--pink-lo) 100%);
+  /* Sombras y brillos del sistema */
+  --shadow-raised: inset 0 1px 0 rgba(255,255,255,.08), inset 0 -2px 0 rgba(0,0,0,.4), 0 10px 20px -6px rgba(0,0,0,.9), 0 2px 4px rgba(0,0,0,.55);
+  --shadow-raised-sm: inset 0 1px 0 rgba(255,255,255,.07), 0 4px 10px -3px rgba(0,0,0,.75);
+  --shadow-pressed: inset 0 3px 7px rgba(0,0,0,.8);
+  --shadow-sunken: inset 0 3px 8px rgba(0,0,0,.8), inset 0 -1px 0 rgba(255,255,255,.07);
+  --shadow-nav: inset 0 1px 0 rgba(255,255,255,.07), 0 -12px 26px -8px rgba(0,0,0,.9);
+  --shadow-sheet: inset 0 1px 0 rgba(255,255,255,.07), 0 -20px 44px -10px rgba(0,0,0,.95);
+  --lift-pink: 0 12px 26px -6px rgba(255,16,128,.75), 0 0 22px rgba(255,16,128,.25), 0 4px 8px rgba(0,0,0,.6), inset 0 2px 0 rgba(255,255,255,.4), inset 0 -3px 0 rgba(0,0,0,.2);
+  --lift-pink-sm: 0 8px 18px -8px rgba(255,16,128,.75), inset 0 1px 0 rgba(255,255,255,.35), inset 0 -2px 0 rgba(0,0,0,.15);
+  --lift-blue: 0 10px 22px -8px rgba(0,145,185,.8), inset 0 1px 0 rgba(255,255,255,.35), inset 0 -2px 0 rgba(0,0,0,.18);
+  --glow-blue: 0 0 0 1px rgba(0,145,185,1), 0 0 14px rgba(0,145,185,.6), 0 0 36px rgba(0,145,185,.28);
+  --glow-blue-soft: 0 0 0 1px rgba(0,145,185,.6), 0 0 12px rgba(0,145,185,.35);
+  --glow-pink: 0 0 0 1px rgba(255,16,128,.95), 0 0 14px rgba(255,16,128,.5), 0 0 36px rgba(255,16,128,.22);
+  --glow-pink-soft: 0 0 0 1px rgba(255,16,128,.55), 0 0 12px rgba(255,16,128,.28);
+  /* Reemplazos de la capa 3D anterior */
+  --drop: var(--shadow-raised);
+  --drop-sm: var(--shadow-raised-sm);
+  --well: var(--shadow-sunken);
+  --orange-grad: var(--pink-grad);
+  --glow: var(--lift-pink-sm), var(--glow-pink-soft);
+}
+
+body { font-family: Rubik, Roboto, "Segoe UI", system-ui, sans-serif; font-size: 15px; }
+.top h1, .sheet h2, .store-name { font-family: Rubik, Roboto, "Segoe UI", system-ui, sans-serif; }
+.top h1 { font-weight: 700; }
+.qty, .seg-n, .store-count, .ring text { font-family: "Roboto Mono", ui-monospace, Consolas, monospace; font-variant-numeric: tabular-nums; }
+.demo-banner { background: var(--pink-grad); color: var(--on-neon); }
+
+/* Encabezado: velo de noche sobre la imagen neón */
+.top::after {
+  background: linear-gradient(90deg, rgba(8,9,15,.94) 0%, rgba(8,9,15,.55) 55%, rgba(8,9,15,.12) 100%),
+              linear-gradient(transparent 55%, var(--bg));
+}
+.top .ring { background: rgba(8,9,15,.85); }
+.ring-fill { stroke: var(--blue); filter: drop-shadow(0 0 4px rgba(0,145,185,.8)); }
+.ring-track { stroke: #1a1e30; }
+
+/* Superficies: la luz cae desde arriba */
+.row { background: linear-gradient(180deg, var(--surface-top), var(--surface-bottom)); box-shadow: var(--shadow-raised); border: 1px solid var(--line); }
+.pic, .tile, .field-icon { background: linear-gradient(180deg, var(--well-top), var(--well-bottom)); box-shadow: var(--shadow-sunken); }
+.tile { color: var(--blue); }
+.tile svg.i { filter: drop-shadow(0 0 4px rgba(0,145,185,.45)); }
+
+/* Tachar: casilla hundida → rosa encendido */
+.check { border-color: #5a6189; background: linear-gradient(180deg, var(--well-top), var(--well-bottom)); box-shadow: var(--shadow-sunken); }
+.is-done .check { background: var(--pink-grad); border-color: transparent; color: var(--on-neon); box-shadow: var(--lift-pink-sm), var(--glow-pink-soft); }
+
+/* Pastillas */
+.pill { background: linear-gradient(180deg, var(--control-top), var(--control-bottom)); border: 1px solid var(--line); color: var(--muted); }
+.pill:active { box-shadow: var(--shadow-pressed); }
+.pill.ghost { border: 1px dashed #2e3350; }
+.pill[aria-pressed="true"] { background: var(--pink-grad); color: var(--on-neon); border-color: transparent; box-shadow: var(--lift-pink-sm), var(--glow-pink-soft); text-shadow: none; }
+.work-toggle[aria-pressed="true"] { background: var(--pink-grad); }
+
+/* Todo / Casa / Trabajo: ubicación = azul */
+.seg { background: linear-gradient(180deg, var(--well-top), var(--well-bottom)); box-shadow: var(--shadow-sunken); }
+.seg-btn[aria-pressed="true"] { background: linear-gradient(180deg, var(--control-top), var(--control-bottom)); box-shadow: var(--shadow-raised), var(--glow-blue-soft); color: var(--text); }
+.seg-btn[aria-pressed="true"] svg.i { color: var(--blue); filter: drop-shadow(0 0 6px rgba(0,145,185,.8)); }
+
+/* Cuentas y etiquetas */
+.store-count, .seg-n, .qty { color: var(--blue); }
+.label.accent { color: var(--pink); text-shadow: 0 0 10px rgba(255,16,128,.35); }
+.also .row { border: 1px dashed #4a1035; background: linear-gradient(180deg, rgba(61,10,45,.35), rgba(43,6,32,.15)); }
+.tag { background: var(--blue-soft); color: var(--blue); }
+
+/* Barra de avance */
+.bar { background: linear-gradient(180deg, var(--well-top), var(--well-bottom)); box-shadow: var(--shadow-sunken); }
+.bar span { background: var(--blue-grad); box-shadow: var(--lift-blue), var(--glow-blue-soft); }
+
+/* Barra inferior: pestaña activa en azul con neón */
+.bottom-nav { background: linear-gradient(180deg, var(--surface-top), var(--surface-bottom)); box-shadow: var(--shadow-nav); border-top-color: var(--line); }
+.nav-btn { color: var(--muted); }
+.nav-btn[aria-current="page"] { color: var(--blue); text-shadow: 0 0 10px rgba(0,145,185,.55); }
+.nav-btn[aria-current="page"] svg.i { filter: drop-shadow(0 0 6px rgba(0,145,185,.8)); }
+.nav-btn[aria-current="page"]::after { background: var(--blue); box-shadow: var(--glow-blue); }
+
+/* Botón +: la acción estrella en rosa */
+.fab { background: var(--pink-grad); color: var(--on-neon); border-color: var(--bg); box-shadow: var(--lift-pink); }
+.fab:active { box-shadow: var(--lift-pink-sm), var(--shadow-pressed); }
+
+/* Botones */
+.btn-primary { background: var(--blue-grad); color: var(--on-neon); box-shadow: var(--lift-blue), var(--glow-blue-soft); }
+.btn-primary:active { box-shadow: var(--shadow-pressed); }
+.btn-outline { border-color: var(--blue-line); color: var(--blue); background: linear-gradient(180deg, var(--blue-soft), var(--bg)); box-shadow: var(--shadow-raised-sm); }
+.btn-ghost { background: linear-gradient(180deg, var(--control-top), var(--control-bottom)); border-color: var(--line); color: var(--muted); }
+.step { background: linear-gradient(180deg, var(--control-top), var(--control-bottom)); border: 1px solid var(--line); }
+.link { color: var(--blue); }
+
+/* Campos: huecos; al escribir, neón azul */
+.field-row, .qty-row input { background: linear-gradient(180deg, var(--well-top), var(--well-bottom)); box-shadow: var(--shadow-sunken); border-color: var(--line); }
+.field-row:focus-within, .qty-row input:focus { border-color: var(--blue); box-shadow: var(--shadow-sunken), var(--glow-blue-soft); }
+
+/* Hojas, aviso y deslizar para borrar */
+.sheet { background: linear-gradient(180deg, var(--surface-top) 0%, var(--surface) 40%); border-top: 1px solid var(--blue-line); box-shadow: var(--shadow-sheet); }
+.handle { background: #5a6189; }
+.sheet-backdrop { background: rgba(2,3,7,.75); }
+.toast { background: linear-gradient(180deg, var(--control-top), var(--control-bottom)); border: 1px solid var(--line); }
+.toast button { color: var(--blue); }
+.swipe-bg { background: #2e1307; color: #d9662b; }
+.empty b { color: var(--pink); }
+
+button:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
